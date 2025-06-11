@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import UserLayout from "./components/Layout/UserLayout";
 import Home from "./Pages/Home";
+import { Toaster } from "sonner";
 
 const App = () => {
   return (
@@ -12,6 +13,8 @@ const App = () => {
           </Route>
         </Routes>
       </BrowserRouter>
+
+      <Toaster position="top-right" />
     </div>
   );
 };
