@@ -1,4 +1,5 @@
-import { HiShoppingBag } from "react-icons/hi";
+import { HiOutlineCreditCard, HiShoppingBag } from "react-icons/hi";
+import { HiArrowPathRoundedSquare } from "react-icons/hi2";
 
 const FeatureSection = () => {
   return (
@@ -17,24 +18,24 @@ const FeatureSection = () => {
             ON All Orders over $100.00
           </p>
         </div>
-        {/* Feature 1 */}
+        {/* Feature 2 */}
         <div className="flex flex-col items-center">
           <div className="p-4 rounded-full mb-4">
-            <HiShoppingBag className="text-xl" />
+            <HiArrowPathRoundedSquare className="text-xl" />
           </div>
-          <h4 className="tracking-tighter mb-2">Free Internation Shipping</h4>
+          <h4 className="tracking-tighter mb-2">45 Days Return</h4>
           <p className="text-gray-600 text-sm tracking-tighter">
-            ON All Orders over $100.00
+            Money Back Gurrantee
           </p>
         </div>
-        {/* Feature 1 */}
+        {/* Feature 3 */}
         <div className="flex flex-col items-center">
           <div className="p-4 rounded-full mb-4">
-            <HiShoppingBag className="text-xl" />
+            <HiOutlineCreditCard className="text-xl" />
           </div>
-          <h4 className="tracking-tighter mb-2">Free Internation Shipping</h4>
+          <h4 className="tracking-tighter mb-2">Secure Checkout</h4>
           <p className="text-gray-600 text-sm tracking-tighter">
-            ON All Orders over $100.00
+            100% Secured Checkout Process
           </p>
         </div>
       </div>
