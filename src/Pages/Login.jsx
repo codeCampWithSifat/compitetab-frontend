@@ -1,13 +1,23 @@
 import { useState } from "react";
+import { Link } from "react-router";
+import loginImage from "../assets/login.webp";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log({ email, password });
+  };
+
   return (
     <div className="flex">
       <div className="w-full md:w-1/2 flex-col justify-center items-center p-8 md:p-12">
-        <form className="w-full max-w-md bg-white p-8 rounded-lg broder shadow-sm">
+        <form
+          onSubmit={handleSubmit}
+          className="w-full max-w-md bg-white p-8 rounded-lg broder shadow-sm"
+        >
           <div className="flex justify-center mb-6">
             <h2 className="text-xl font-medium ">Rabbit</h2>
           </div>
@@ -41,11 +51,31 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition py-2"
+            className="w-full bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition p-2"
           >
             Login
           </button>
+
+          <p className="mt-6 text-center text-sm">
+            Don't have an account ? {""}
+            <Link
+              className="text-red-700 font-bold cursor-pointer"
+              to={"/register"}
+            >
+              Click For Register 🦾
+            </Link>
+          </p>
         </form>
+      </div>
+
+      <div className="hidden md:block w-1/2 bg-gray-800">
+        <div className="h-full flex flex-col justify-center items-center">
+          <img
+            src={loginImage}
+            alt=""
+            className="h-[570px] w-full object-cover"
+          />
+        </div>
       </div>
     </div>
   );
