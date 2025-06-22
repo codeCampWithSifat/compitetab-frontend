@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 
 const OrderDetailsPage = () => {
   const { id } = useParams();
@@ -103,9 +103,47 @@ const OrderDetailsPage = () => {
           <div className="overflow-x-auto">
             <h4 className="text-lg font-semibold mb-4">Products</h4>
             <table className="min-w-full text-gray-600 mb-4">
-              <thead className=""></thead>
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="py-2 px-4">Name</th>
+                  <th className="py-2 px-4">Unit Price</th>
+                  <th className="py-2 px-4">Quantity</th>
+                  <th className="py-2 px-4">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orderDetails.orderItems.map((item) => (
+                  <tr key={item.productId} className="border-b">
+                    <td className="py-2 px-4 flex items-center justify-center ">
+                      <img
+                        src={item.image}
+                        className="w-12 h-12 object-cover rounded mr-4"
+                        alt=""
+                      />
+
+                      {/* <Link
+                        className=" text-blue-500 hover:underline '
+                      "
+                        to={`/product/${item.productId}`}
+                      >
+                        {item.name}
+                      </Link> */}
+                    </td>
+
+                    <td className="py-2 px-4 text-center">{item.price}</td>
+                    <td className="py-2 px-4 text-center">{item.quantity}</td>
+                    <td className="py-2 px-4 text-center">
+                      {item.price * item.quantity}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
+          {/* Back To Order Link */}
+          <Link to="/my-orders" className="text-blue-500 hover:underline">
+            Back To My Orders
+          </Link>
         </div>
       )}
     </div>
