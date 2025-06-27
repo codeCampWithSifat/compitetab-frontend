@@ -3,6 +3,7 @@ import { useState } from "react";
 const UserManagement = () => {
   const users = [
     {
+      _id: "1",
       name: "Sifat Rifat",
       email: "sifat100@gmail.com",
       role: "admin",
@@ -33,6 +34,16 @@ const UserManagement = () => {
       password: "",
       role: "customer",
     });
+  };
+
+  const handleRoleChange = (userId, newRole) => {
+    console.log({ id: userId, role: newRole });
+  };
+
+  const handleDeleteUser = (userId) => {
+    if (window.confirm("Are You Sure ? Delete This User")) {
+      console.log({ id: userId });
+    }
   };
   return (
     <div className="max-w-7xl mx-auto p-6">
@@ -80,14 +91,6 @@ const UserManagement = () => {
           </div>
           <div className="mb-4">
             <label className="block text-gray-700">Role</label>
-            {/* <input
-              type="text"
-              name="role"
-              value={formData.name}
-              onChange={handleUser}
-              placeholder="Enter Your Name"
-              className="w-full p-2 border rounded"
-            /> */}
 
             <select
               className="w-full p-2 border rounded text-black"
@@ -106,6 +109,60 @@ const UserManagement = () => {
             Add User
           </button>
         </form>
+      </div>
+
+      {/* User List Management */}
+
+      <div className="overflow-x-auto shadow-md sm:rounded-lg">
+        <table className="min-w-full text-left">
+          <thead className="bg-gray-300 text-xs uppercase text-gray-700">
+            <tr>
+              <th className="py-3 px-4">Name</th>
+              <th className="py-3 px-4">Email</th>
+              <th className="py-3 px-4">Role</th>
+              <th className="py-3 px-4">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {users.map((user) => (
+              <tr key={user._id} className="border-b hover:bg-gray-200">
+                <td
+                  className="p-4 font-medium
+                   text-gray-900 whitespace-nowrap"
+                >
+                  {user.name}
+                </td>
+                <td
+                  className="p-4 font-medium
+                   text-gray-900 whitespace-nowrap"
+                >
+                  {user.email}
+                </td>
+
+                <td className="p-4 ">
+                  <select
+                    value={user.role}
+                    onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                    className="border rounded p-2"
+                  >
+                    <option value="">Select Role</option>
+                    <option value="customer">Customer</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </td>
+                <td className="p-4">
+                  <button
+                    className="bg-red-400 px-2 py-1 rounded text-white text-md"
+                    onClick={() => handleDeleteUser(user._id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
