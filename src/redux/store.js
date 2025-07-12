@@ -5,6 +5,8 @@ import cartReducer from "../redux/slices/cartSlice";
 import checkoutReducer from "../redux/slices/checkoutSlice";
 import orderReducer from "../redux/slices/orderSlice";
 import adminReducer from "../redux/slices/adminSlice";
+import adminProductReducer from "../redux/slices/adminProductSlice";
+import adminOrderReducer from "../redux/slices/adminOrderSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +16,8 @@ const store = configureStore({
     checkout: checkoutReducer,
     orders: orderReducer,
     admin: adminReducer,
+    adminProducts: adminProductReducer,
+    adminOrders: adminOrderReducer,
   },
 });
 

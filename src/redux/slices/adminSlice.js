@@ -58,25 +58,37 @@ export const updateUser = createAsyncThunk(
 );
 
 // Delete users admin only
-export const deleteUser = createAsyncThunk(
-  "admin/deleteUser",
-  async (id, { rejectWithValue }) => {
-    try {
-      const response = await axios.delete(
-        `${import.meta.env.VITE_BACKEND_URL}/api/admin/users/${id}`,
+// export const deleteUser = createAsyncThunk(
+//   "admin/deleteUser",
+//   async (id, { rejectWithValue }) => {
+//     try {
+//       const response = await axios.delete(
+//         `${import.meta.env.VITE_BACKEND_URL}/api/admin/users/${id}`,
 
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-          },
-        }
-      );
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
+//         {
+//           headers: {
+//             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+//           },
+//         }
+//       );
+//       return response.data;
+//     } catch (error) {
+//       return rejectWithValue(error.response.data);
+//     }
+//   }
+// );
+
+export const deleteUser = createAsyncThunk("admin/deleteUser", async (id) => {
+  await axios.delete(
+    `${import.meta.env.VITE_BACKEND_URL}/api/admin/users/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+      },
     }
-  }
-);
+  );
+  return id;
+});
 
 const adminSlice = createSlice({
   name: "admin",
@@ -99,7 +111,7 @@ const adminSlice = createSlice({
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.message;
+        state.error = action.error.message;
       })
 
       // Add All Users For Admin
@@ -109,7 +121,7 @@ const adminSlice = createSlice({
       })
       .addCase(addUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.users = action.payload;
+        state.users.push(action.payload.user); // Add a new user to the state
       })
       .addCase(addUser.rejected, (state, action) => {
         state.loading = false;
