@@ -1,85 +1,107 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import ProductGrid from "./ProductGrid";
+import { useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchProductDetails,
+  fetchSimilarProducts,
+} from "../../redux/slices/productsSlice";
+import { addToCart } from "../../redux/slices/cartSlice";
 
-const selectedProduct = {
-  name: "Stylish Pant",
-  price: 2200,
-  originalPrice: 2500,
-  description: "This is our own brand new this new collection",
-  brand: "FashionBrand",
-  material: "Leather",
-  sizes: ["S", "M", "L", "XL"],
-  colors: ["Red", "Yellow"],
-  images: [
-    {
-      url: "https://picsum.photos/500/500?random=1",
-      altText: "Stylish Jacket",
-    },
-    {
-      url: "https://picsum.photos/500/500?random=2",
-      altText: "Stylish Leather",
-    },
-    {
-      url: "https://picsum.photos/500/500?random=3",
-      altText: "Stylish Border",
-    },
-  ],
-};
+// const selectedProduct = {
+//   name: "Stylish Pant",
+//   price: 2200,
+//   originalPrice: 2500,
+//   description: "This is our own brand new this new collection",
+//   brand: "FashionBrand",
+//   material: "Leather",
+//   sizes: ["S", "M", "L", "XL"],
+//   colors: ["Red", "Yellow"],
+//   images: [
+//     {
+//       url: "https://picsum.photos/500/500?random=1",
+//       altText: "Stylish Jacket",
+//     },
+//     {
+//       url: "https://picsum.photos/500/500?random=2",
+//       altText: "Stylish Leather",
+//     },
+//     {
+//       url: "https://picsum.photos/500/500?random=3",
+//       altText: "Stylish Border",
+//     },
+//   ],
+// };
 
-const similarProducts = [
-  {
-    _id: 1,
-    name: "Product 1",
-    price: 200,
-    images: [
-      {
-        url: "https://picsum.photos/500/500?random=4",
-        altText: "Stylish Leather",
-      },
-    ],
-  },
-  {
-    _id: 2,
-    name: "Product 2",
-    price: 250,
-    images: [
-      {
-        url: "https://picsum.photos/500/500?random=5",
-        altText: "Stylish Leather",
-      },
-    ],
-  },
-  {
-    _id: 3,
-    name: "Product 3",
-    price: 260,
-    images: [
-      {
-        url: "https://picsum.photos/500/500?random=6",
-        altText: "Stylish Leather",
-      },
-    ],
-  },
-  {
-    _id: 4,
-    name: "Product 4",
-    price: 200,
-    images: [
-      {
-        url: "https://picsum.photos/500/500?random=7",
-        altText: "Stylish Leather",
-      },
-    ],
-  },
-];
+// const similarProducts = [
+//   {
+//     _id: 1,
+//     name: "Product 1",
+//     price: 200,
+//     images: [
+//       {
+//         url: "https://picsum.photos/500/500?random=4",
+//         altText: "Stylish Leather",
+//       },
+//     ],
+//   },
+//   {
+//     _id: 2,
+//     name: "Product 2",
+//     price: 250,
+//     images: [
+//       {
+//         url: "https://picsum.photos/500/500?random=5",
+//         altText: "Stylish Leather",
+//       },
+//     ],
+//   },
+//   {
+//     _id: 3,
+//     name: "Product 3",
+//     price: 260,
+//     images: [
+//       {
+//         url: "https://picsum.photos/500/500?random=6",
+//         altText: "Stylish Leather",
+//       },
+//     ],
+//   },
+//   {
+//     _id: 4,
+//     name: "Product 4",
+//     price: 200,
+//     images: [
+//       {
+//         url: "https://picsum.photos/500/500?random=7",
+//         altText: "Stylish Leather",
+//       },
+//     ],
+//   },
+// ];
 
-const ProductDetails = () => {
+const ProductDetails = ({ productId }) => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const { selectedProduct, loading, error, similarProducts } = useSelector(
+    (state) => state.products
+  );
+
+  const { user, guestId } = useSelector((state) => state.auth);
   const [mainImage, setMainImage] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  const productFetchId = productId || id;
+  useEffect(() => {
+    if (productFetchId) {
+      dispatch(fetchProductDetails(productFetchId));
+      dispatch(fetchSimilarProducts({ id: productFetchId }));
+    }
+  }, [dispatch, productFetchId]);
 
   useEffect(() => {
     if (selectedProduct?.images?.length > 0) {
@@ -103,17 +125,33 @@ const ProductDetails = () => {
     }
 
     setIsButtonDisabled(true);
-    setTimeout(() => {
-      toast.success("Product Added To Cart", { duration: 1000 });
-      setIsButtonDisabled(false);
-    }, 1000);
+    dispatch(
+      addToCart({
+        productId: productFetchId,
+        quantity,
+        size: selectedSize,
+        color: selectedColor,
+        guestId,
+        user: user._id,
+      })
+    )
+      .then(() => {
+        toast.success("Product Added To Cart Succesfully");
+      })
+      .finally(() => {
+        setIsButtonDisabled(false);
+      });
   };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
   return (
     <div className="p-6 ">
       <div className="max-w-6xl mx-auto bg-white p-8 rounded-lg">
         <div className="flex flex-col md:flex-row">
           <div className="hidden md:flex flex-col space-y-4 mr-6">
-            {selectedProduct.images.map((image, index) => (
+            {selectedProduct?.images?.map((image, index) => (
               <img
                 key={index}
                 src={image.url}
@@ -155,16 +193,16 @@ const ProductDetails = () => {
           {/* Right Section */}
           <div className="md:1/2 md:ml-10 ">
             <h1 className="text-2xl md:text-3xl font-semibold mb-2">
-              {selectedProduct.name}
+              {selectedProduct?.name}
             </h1>
-            <p className="text-lg text-gray 600 mb-1 line-through">
-              {selectedProduct.originalPrice &&
-                `${selectedProduct.originalPrice}`}
-            </p>
-            <p className="text-xl text-gray-500 mb-2">
+            {/* <p className="text-lg text-gray 600 mb-1 line-through">
+              {selectedProduct.price &&
+                `${selectedProduct?.price}`}
+            </p> */}
+            {/* <p className="text-xl text-gray-500 mb-2">
               $ {selectedProduct.price}
-            </p>
-            <p className="text-gray-600 mb-5">{selectedProduct.description}</p>
+            </p> */}
+            {/* <p className="text-gray-600 mb-5">{selectedProduct.description}</p> */}
 
             <div className="mb-4">
               <p className="text-gray-700">Color : </p>
