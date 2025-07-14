@@ -1,12 +1,13 @@
 import { Link } from "react-router";
 
-const ProductGrid = ({ products, loading ,error }) => {
-  if(loading) {
-    return <p>Loading...</p>
-  } 
-  if(error) {
-    return <p>Something Went Wrong : {error}</p>
+const ProductGrid = ({ products, loading, error }) => {
+  if (loading) {
+    return <p>Loading...</p>;
   }
+  if (error) {
+    return <p>Something Went Wrong : {error}</p>;
+  }
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 ">
       {products.map((product) => (
