@@ -33,8 +33,9 @@ export const fetchProductsByFilters = createAsyncThunk(
     if (limit) query.append("limit", limit);
 
     const response = await axios.get(
-      `${import.meta.env.VITE_BACKEND_URL}/api/products?${query.toString()}`
+      `${import.meta.env.VITE_BACKEND_URL}/api/products?${query}`
     );
+    console.log("Product Slice Response", response);
     return response.data;
   }
 );
@@ -133,7 +134,8 @@ const productSlice = createSlice({
       })
       .addCase(fetchProductsByFilters.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = Array.isArray(action.payload) ? action.payload : [];
+        // state.products = Array.isArray(action.payload) ? action.payload : [];
+        state.products = action.payload;
       })
       .addCase(fetchProductsByFilters.rejected, (state, action) => {
         state.loading = false;
@@ -181,7 +183,7 @@ const productSlice = createSlice({
       })
       .addCase(fetchSimilarProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = action.payload;
+        state.similarProducts = action.payload;
       })
       .addCase(fetchSimilarProducts.rejected, (state, action) => {
         state.loading = false;

@@ -3,11 +3,19 @@ import { FaFilter } from "react-icons/fa";
 import FilterSidebar from "../components/Products/FilterSidebar";
 import SortOptions from "../components/Products/SortOptions";
 import ProductGrid from "../components/Products/ProductGrid";
+import { useParams, useSearchParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProductsByFilters } from "../redux/slices/productsSlice";
 
 const CollectionPage = () => {
-  const [products, setProducts] = useState([]);
   const sideberRef = useRef(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const { collection } = useParams();
+  const [searchParams] = useSearchParams();
+  const dispatch = useDispatch();
+  const { products, loading, error } = useSelector((state) => state.products);
+  const queryParams = Object.fromEntries([...searchParams]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -21,6 +29,10 @@ const CollectionPage = () => {
   };
 
   useEffect(() => {
+    dispatch(fetchProductsByFilters({ collection, ...queryParams }));
+  }, [collection, dispatch, searchParams]);
+
+  useEffect(() => {
     // add eventlistener
     document.addEventListener("mousedown", handleClickOutside);
 
@@ -28,80 +40,6 @@ const CollectionPage = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
-      const fetchedProducts = [
-        {
-          _id: 1,
-          name: "Product 1",
-          price: 200,
-          images: [
-            {
-              url: "https://picsum.photos/500/500?random=10",
-              altText: "Stylish Leather",
-            },
-          ],
-        },
-        {
-          _id: 2,
-          name: "Product 2",
-          price: 250,
-          images: [
-            {
-              url: "https://picsum.photos/500/500?random=11",
-              altText: "Stylish Leather",
-            },
-          ],
-        },
-        {
-          _id: 3,
-          name: "Product 3",
-          price: 260,
-          images: [
-            {
-              url: "https://picsum.photos/500/500?random=12",
-              altText: "Stylish Leather",
-            },
-          ],
-        },
-        {
-          _id: 4,
-          name: "Product 4",
-          price: 200,
-          images: [
-            {
-              url: "https://picsum.photos/500/500?random=13",
-              altText: "Stylish Leather",
-            },
-          ],
-        },
-        {
-          _id: 5,
-          name: "Product 5",
-          price: 200,
-          images: [
-            {
-              url: "https://picsum.photos/500/500?random=14",
-              altText: "Stylish Leather",
-            },
-          ],
-        },
-        {
-          _id: 6,
-          name: "Product 6",
-          price: 200,
-          images: [
-            {
-              url: "https://picsum.photos/500/500?random=15",
-              altText: "Stylish Leather",
-            },
-          ],
-        },
-      ];
-      setProducts(fetchedProducts);
-    }, 1000);
   }, []);
 
   return (
@@ -130,7 +68,7 @@ const CollectionPage = () => {
         <SortOptions />
 
         {/* Product Grid */}
-        <ProductGrid products={products} />
+        <ProductGrid products={products} loading={loading} error={error} />
       </div>
     </div>
   );

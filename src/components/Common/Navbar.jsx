@@ -30,25 +30,25 @@ const Navbar = () => {
         {/* Center Navigation Links */}
         <div className="hidden md:flex space-x-6">
           <Link
-            to="/collections/all"
+            to="/collections/all?gender=Men"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             Men
           </Link>
           <Link
-            to="#"
+            to="/collections/all?gender=Women"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             Women
           </Link>
           <Link
-            to="#"
+            to="/collections/all?category=Top Wear"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             Top Wear
           </Link>
           <Link
-            to="#"
+            to="/collections/all?category=Bottom Wear"
             className="text-gray-700 hover:text-black text-sm font-medium uppercase"
           >
             Bottom Wear
@@ -104,14 +104,14 @@ const Navbar = () => {
           <nav>
             <Link
               className="block mt-3 text-gray-600 hover:text-black"
-              to="#"
+              to="/collections/all?gender=Men"
               onClick={toggleNavbarDrawer}
             >
               Men
             </Link>
             <Link
               className="block mt-3 text-gray-600 hover:text-black"
-              to="#"
+              to="/collections/all?gender=Women"
               onClick={toggleNavbarDrawer}
             >
               Women
@@ -119,14 +119,14 @@ const Navbar = () => {
 
             <Link
               className="block mt-3 text-gray-600 hover:text-black"
-              to="#"
+              to="/collections/all?category=Top Wear"
               onClick={toggleNavbarDrawer}
             >
               Top Wear
             </Link>
             <Link
               className="block mt-3 text-gray-600 hover:text-black"
-              to="#"
+              to="/collections/all?category=Bottom Wear"
               onClick={toggleNavbarDrawer}
             >
               Bottom Wear
