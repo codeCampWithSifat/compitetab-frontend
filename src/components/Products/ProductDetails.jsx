@@ -122,7 +122,7 @@ const ProductDetails = ({ productId }) => {
     if (!selectedSize || !selectedColor) {
       toast.error("Kindly Add Size And Color", { duration: 1000 });
 
-      // return;
+      return;
     }
 
     setIsButtonDisabled(true);
