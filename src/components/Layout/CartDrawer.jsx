@@ -2,7 +2,6 @@ import { IoMdClose } from "react-icons/io";
 import CartContent from "../Cart/CartContent";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
-import { useId } from "react";
 
 const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
   const navigate = useNavigate();
@@ -37,12 +36,11 @@ const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
       <div className="flex-grow p-4 overflow-y-auto ">
         <h2 className="text-xl font-semibold mb-4">Your Cart</h2>
         {/* Component for cart contents */}
-        {cart?.products?.length > 0 ? (
-          <CartContent cart={cart} userId={useId} guestId={guestId} />
+        {cart?.products?.length ? (
+          <CartContent cart={cart} userId={userId} guestId={guestId} />
         ) : (
           <p>Your Cart is empty</p>
         )}
-        <CartContent />
 
         {/* checkout button fixed at the botton */}
         <div className="p-4 bg-white fixed  bottom-0 ">
