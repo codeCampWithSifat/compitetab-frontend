@@ -141,9 +141,11 @@ export const mergeCart = createAsyncThunk(
 //
 const cartSlice = createSlice({
   name: "cart",
-  initialState: loadCartFromStorage(),
-  loading: false,
-  error: null,
+  initialState: {
+    cart: loadCartFromStorage(),
+    loading: false,
+    error: null,
+  },
   reducers: {
     clearCart: (state) => {
       state.cart = { products: [] };

@@ -82,6 +82,7 @@ import { addToCart } from "../../redux/slices/cartSlice";
 // ];
 
 const ProductDetails = ({ productId }) => {
+  // console.log("Product Id", productId);
   const { id } = useParams();
   const dispatch = useDispatch();
   const { selectedProduct, loading, error, similarProducts } = useSelector(
@@ -107,7 +108,7 @@ const ProductDetails = ({ productId }) => {
     if (selectedProduct?.images?.length > 0) {
       setMainImage(selectedProduct.images[0].url);
     }
-  }, []);
+  }, [selectedProduct]);
 
   const handleQuantityChange = (action) => {
     if (action === "plus") {
@@ -121,7 +122,7 @@ const ProductDetails = ({ productId }) => {
     if (!selectedSize || !selectedColor) {
       toast.error("Kindly Add Size And Color", { duration: 1000 });
 
-      return;
+      // return;
     }
 
     setIsButtonDisabled(true);
@@ -132,7 +133,7 @@ const ProductDetails = ({ productId }) => {
         size: selectedSize,
         color: selectedColor,
         guestId,
-        user: user._id,
+        userId: user ? user?._id : null,
       })
     )
       .then(() => {
@@ -302,7 +303,11 @@ const ProductDetails = ({ productId }) => {
             <h2 className="text-2xl text-center font-medium mb-4">
               You May Also Like
             </h2>
-            <ProductGrid products={similarProducts} />
+            <ProductGrid
+              products={similarProducts}
+              loading={loading}
+              error={error}
+            />
           </div>
         </div>
       )}

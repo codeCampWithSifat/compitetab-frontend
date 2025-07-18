@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Link } from "react-router";
@@ -9,97 +10,111 @@ const NewArrivals = () => {
   const [scrollLeft, setScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
-  const newArrivals = [
-    {
-      _id: "1",
-      name: "",
-      price: 120,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=1",
-          alttext: "Stylish Jacket",
-        },
-      ],
-    },
-    {
-      _id: "2",
-      name: "",
-      price: 120,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=2",
-          alttext: "Stylish Jacket",
-        },
-      ],
-    },
-    {
-      _id: "3",
-      name: "",
-      price: 120,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=3",
-          alttext: "Stylish Jacket",
-        },
-      ],
-    },
-    {
-      _id: "4",
-      name: "",
-      price: 120,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=4",
-          alttext: "Stylish Jacket",
-        },
-      ],
-    },
-    {
-      _id: "5",
-      name: "",
-      price: 120,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=5",
-          alttext: "Stylish Jacket",
-        },
-      ],
-    },
-    {
-      _id: "6",
-      name: "",
-      price: 120,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=6",
-          alttext: "Stylish Jacket",
-        },
-      ],
-    },
-    {
-      _id: "7",
-      name: "",
-      price: 120,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=7",
-          alttext: "Stylish Jacket",
-        },
-      ],
-    },
-    {
-      _id: "8",
-      name: "",
-      price: 120,
-      images: [
-        {
-          url: "https://picsum.photos/500/500?random=8",
-          alttext: "Stylish Jacket",
-        },
-      ],
-    },
-  ];
+  // const newArrivals = [
+  //   {
+  //     _id: "1",
+  //     name: "",
+  //     price: 120,
+  //     images: [
+  //       {
+  //         url: "https://picsum.photos/500/500?random=1",
+  //         alttext: "Stylish Jacket",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     _id: "2",
+  //     name: "",
+  //     price: 120,
+  //     images: [
+  //       {
+  //         url: "https://picsum.photos/500/500?random=2",
+  //         alttext: "Stylish Jacket",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     _id: "3",
+  //     name: "",
+  //     price: 120,
+  //     images: [
+  //       {
+  //         url: "https://picsum.photos/500/500?random=3",
+  //         alttext: "Stylish Jacket",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     _id: "4",
+  //     name: "",
+  //     price: 120,
+  //     images: [
+  //       {
+  //         url: "https://picsum.photos/500/500?random=4",
+  //         alttext: "Stylish Jacket",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     _id: "5",
+  //     name: "",
+  //     price: 120,
+  //     images: [
+  //       {
+  //         url: "https://picsum.photos/500/500?random=5",
+  //         alttext: "Stylish Jacket",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     _id: "6",
+  //     name: "",
+  //     price: 120,
+  //     images: [
+  //       {
+  //         url: "https://picsum.photos/500/500?random=6",
+  //         alttext: "Stylish Jacket",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     _id: "7",
+  //     name: "",
+  //     price: 120,
+  //     images: [
+  //       {
+  //         url: "https://picsum.photos/500/500?random=7",
+  //         alttext: "Stylish Jacket",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     _id: "8",
+  //     name: "",
+  //     price: 120,
+  //     images: [
+  //       {
+  //         url: "https://picsum.photos/500/500?random=8",
+  //         alttext: "Stylish Jacket",
+  //       },
+  //     ],
+  //   },
+  // ];
 
+  const [newArrivals, setNewArrivals] = useState([]);
+  useEffect(() => {
+    const fetchNewArrivals = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/products/new-arrivals`
+        );
+        setNewArrivals(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchNewArrivals();
+  }, []);
   const updateScrollButtons = () => {
     const container = scrollRef.current;
     console.log({

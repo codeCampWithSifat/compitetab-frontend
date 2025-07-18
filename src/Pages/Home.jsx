@@ -80,31 +80,34 @@ import axios from "axios";
 // ];
 
 const Home = () => {
-  const dispatch = useDispatch()
-  const {products, loading, error} = useSelector((state) => state.products)
-
+  const dispatch = useDispatch();
+  const { products, loading, error } = useSelector((state) => state.products);
   const [bestSellerProduct, setBestSellerProduct] = useState(null);
 
-  useEffect(() =>{
-    dispatch(fetchProductsByFilters({
-      gender : "Women",
-      category : "Bottom Wear",
-      limit : 8
-    }))
+  useEffect(() => {
+    // Fetch Product For a Specific Collection
+    dispatch(
+      fetchProductsByFilters({
+        gender: "Women",
+        category: "Top Wear",
+        limit: 8,
+      })
+    );
+    // Fetch Best Seller Product
+    const fetchBestSeller = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/products/best-seller`
+        );
+        console.log("Fetch Best Seller", response.data);
+        setBestSellerProduct(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchBestSeller();
+  }, [dispatch]);
 
-// Fetch The Best Seller Product
-const fetchBestSeller = async () => {
-try {
-  const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products/best-seller`)
-  setBestSellerProduct(response.data)
-} catch (error) {
-  console.error(error);
-
-}
-}
-fetchBestSeller()
-
-  },[dispatch])
   return (
     <div>
       <Hero />
@@ -115,9 +118,11 @@ fetchBestSeller()
       <h2 className="text-3xl text-center font-bold mb-4 text-gray-800">
         Best Seller
       </h2>
-      {
-        bestSellerProduct ?  <ProductDetails productId={bestSellerProduct._id} /> : <p className="text-center">Loading Best Seller Product...</p>
-      }
+      {bestSellerProduct ? (
+        <ProductDetails productId={bestSellerProduct._id} />
+      ) : (
+        <p className="text-center">Loading Best Seller Product...</p>
+      )}
 
       <div className="container mx-auto ">
         <h2 className="text-3xl text-center font-bold mb-4">

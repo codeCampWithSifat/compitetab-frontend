@@ -35,7 +35,7 @@ export const fetchProductsByFilters = createAsyncThunk(
     const response = await axios.get(
       `${import.meta.env.VITE_BACKEND_URL}/api/products?${query}`
     );
-    console.log("Product Slice Response", response);
+    // console.log("Product Slice Response", response);
     return response.data;
   }
 );
@@ -148,7 +148,7 @@ const productSlice = createSlice({
       })
       .addCase(fetchProductDetails.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = action.payload;
+        state.selectedProduct = action.payload;
       })
       .addCase(fetchProductDetails.rejected, (state, action) => {
         state.loading = false;
