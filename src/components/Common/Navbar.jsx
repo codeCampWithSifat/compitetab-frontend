@@ -11,7 +11,9 @@ const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [navbarDrawerOpen, setNavbarDrawerOpen] = useState(false);
   const { cart } = useSelector((state) => state.cart);
-  const cartItemCount = cart?.products?.length;
+  const cartItemCount =
+    cart?.products?.reduce((total, product) => total + product.quantity, 0) ||
+    0;
   const toggleCartDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };

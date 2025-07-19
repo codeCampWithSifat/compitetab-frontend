@@ -99,7 +99,7 @@ const Home = () => {
         const response = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/products/best-seller`
         );
-        console.log("Fetch Best Seller", response.data);
+        // console.log("Fetch Best Seller", response.data);
         setBestSellerProduct(response.data);
       } catch (error) {
         console.error(error);
