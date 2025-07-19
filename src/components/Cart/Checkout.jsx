@@ -53,7 +53,7 @@ const Checkout = () => {
     e.preventDefault();
     // setCheckoutId(123);
     if (cart && cart.products.length > 0) {
-      const res = dispatch(
+      const res = await dispatch(
         createCheckout({
           checkoutItems: cart.products,
           shippingAddress,
@@ -70,8 +70,8 @@ const Checkout = () => {
 
   const handlePaymentSuccess = async (details) => {
     try {
-      const response = await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/api/checkout/pay`,
+      await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/pay`,
         {
           paymentStatus: "paid",
           paymentDetails: details,
@@ -82,38 +82,32 @@ const Checkout = () => {
           },
         }
       );
-      if (response.status === 200) {
-        await handleFinalizeCheckout(checkoutId); //
-      } else {
-        console.error(error);
-      }
+
+      await handleFinalizeCheckout(checkoutId); //
     } catch (error) {
       console.error(error);
     }
     // navigate("/order-confirmation");
+  };
 
-    const handleFinalizeCheckout = async (checkoutId) => {
-      try {
-        const response = await axios.post(
-          `${
-            import.meta.env.VITE_BACKEND_URL
-          }/api/checkout/${checkoutId}/finalize`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-            },
-          }
-        );
-        if (response.status === 200) {
-          navigate("/order-confirmation");
-        } else {
-          console.error(error);
+  const handleFinalizeCheckout = async (checkoutId) => {
+    try {
+      await axios.post(
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/checkout/${checkoutId}/finalize`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          },
         }
-      } catch (error) {
-        console.error(error);
-      }
-    };
+      );
+
+      navigate("/order-confirmation");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   if (loading) {
@@ -166,7 +160,7 @@ const Checkout = () => {
                 value={shippingAddress.lastName}
                 onChange={(e) =>
                   setShippingAddress({
-                    ...setShippingAddress,
+                    ...shippingAddress,
                     lastName: e.target.value,
                   })
                 }
@@ -184,7 +178,7 @@ const Checkout = () => {
               value={shippingAddress.address}
               onChange={(e) =>
                 setShippingAddress({
-                  ...setShippingAddress,
+                  ...shippingAddress,
                   address: e.target.value,
                 })
               }
@@ -200,7 +194,7 @@ const Checkout = () => {
                 value={shippingAddress.city}
                 onChange={(e) =>
                   setShippingAddress({
-                    ...setShippingAddress,
+                    ...shippingAddress,
                     city: e.target.value,
                   })
                 }
@@ -215,7 +209,7 @@ const Checkout = () => {
                 value={shippingAddress.postalCode}
                 onChange={(e) =>
                   setShippingAddress({
-                    ...setShippingAddress,
+                    ...shippingAddress,
                     postalCode: e.target.value,
                   })
                 }
@@ -232,7 +226,7 @@ const Checkout = () => {
               value={shippingAddress.country}
               onChange={(e) =>
                 setShippingAddress({
-                  ...setShippingAddress,
+                  ...shippingAddress,
                   country: e.target.value,
                 })
               }
@@ -247,7 +241,7 @@ const Checkout = () => {
               value={shippingAddress.phone}
               onChange={(e) =>
                 setShippingAddress({
-                  ...setShippingAddress,
+                  ...shippingAddress,
                   phone: e.target.value,
                 })
               }
