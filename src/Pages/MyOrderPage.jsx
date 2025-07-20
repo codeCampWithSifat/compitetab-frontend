@@ -1,47 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { fectchUserOrders } from "../redux/slices/orderSlice";
 
 const MyOrderPage = () => {
-  const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { orders, loading, error } = useSelector((state) => state.orders);
 
   useEffect(() => {
-    setTimeout(() => {
-      const mocOrders = [
-        {
-          _id: "123",
-          createdAt: new Date(),
-          shippingAddress: { city: "Dhaka", country: "USA" },
-          orderItems: [
-            {
-              name: "Product 1",
-              image: "https://picsum.photos/500/500?random=1",
-            },
-          ],
-          totalPrice: 100,
-          isPaid: true,
-        },
-        {
-          _id: "345",
-          createdAt: new Date(),
-          shippingAddress: { city: "Dhaka", country: "USA" },
-          orderItems: [
-            {
-              name: "Product 2",
-              image: "https://picsum.photos/500/500?random=2",
-            },
-          ],
-          totalPrice: 100,
-          isPaid: false,
-        },
-      ];
-      setOrders(mocOrders);
-    }, 1000);
-  }, []);
+    dispatch(fectchUserOrders());
+  }, [dispatch]);
 
   const handleRowClick = (orderId) => {
     navigate(`/order/${orderId}`);
   };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  } else if (error) {
+    return <p>Something Went Wrong {error}</p>;
+  }
   return (
     <div className="max-w-7xl mx-auto px-4 sm:p-6">
       <h2 className="text-xl sm:text-2xl font-bold mb-6">My Orders</h2>
