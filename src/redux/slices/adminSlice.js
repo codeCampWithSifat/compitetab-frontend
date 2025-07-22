@@ -11,6 +11,7 @@ export const fetchUsers = createAsyncThunk("admin/fetchUsers", async () => {
       },
     }
   );
+
   return response.data;
 });
 
@@ -38,18 +39,20 @@ export const addUser = createAsyncThunk(
 // Create users admin only
 export const updateUser = createAsyncThunk(
   "admin/updateUser",
-  async ({ id, name, role }, { rejectWithValue }) => {
+  async ({ id, role }, { rejectWithValue }) => {
     try {
-      const userData = { name, role };
+      const token = localStorage.getItem("userToken");
+      if (!token) throw new Error("No auth token found");
       const response = await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/api/admin/users/${id}`,
-        userData,
+        { role },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
           },
         }
       );
+      console.log("updateUser", response);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -136,7 +139,7 @@ const adminSlice = createSlice({
       .addCase(updateUser.fulfilled, (state, action) => {
         state.loading = false;
         const updatedUser = action.payload;
-        const userIndex = updatedUser.findIndex(
+        const userIndex = state.users.findIndex(
           (user) => user._id === updatedUser._id
         );
         if (userIndex !== -1) {

@@ -8,11 +8,12 @@ const USER_TOKEN = `Bearer ${localStorage.getItem("userToken")}`;
 export const fetchAdminProducts = createAsyncThunk(
   "adminProducts/fetchProducts",
   async () => {
-    const response = axios.get(`${API_URL}/api/admin/products`, {
+    const response = await axios.get(`${API_URL}/api/admin/products`, {
       headers: {
         Authorization: USER_TOKEN,
       },
     });
+
     return response.data;
   }
 );

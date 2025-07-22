@@ -1,14 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import {
+  addUser,
+  deleteUser,
+  fetchUsers,
+  updateUser,
+} from "../../redux/slices/adminSlice";
 
 const UserManagement = () => {
-  const users = [
-    {
-      _id: "1",
-      name: "Sifat Rifat",
-      email: "sifat100@gmail.com",
-      role: "admin",
-    },
-  ];
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user } = useSelector((state) => state.auth);
+  const { users, loading, error } = useSelector((state) => state.admin);
+  console.log("Usermanagement", users);
+  useEffect(() => {
+    if (user && user?.role !== "admin") {
+      navigate("/");
+    }
+  }, [navigate, user]);
+
+  useEffect(() => {
+    if (user && user?.role === "admin") {
+      dispatch(fetchUsers());
+    }
+  }, [dispatch, user]);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -25,26 +43,33 @@ const UserManagement = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("formData", formData);
+
+    dispatch(addUser(formData));
 
     // Reset The Form After Submission
     setFormData({
       name: "",
       email: "",
       password: "",
-      role: "customer",
+      role: "",
     });
   };
 
-  const handleRoleChange = (userId, newRole) => {
-    console.log({ id: userId, role: newRole });
+  const handleRoleChange = async (userId, newRole) => {
+    await dispatch(updateUser({ id: userId, role: newRole }));
+    dispatch(fetchUsers());
   };
-
   const handleDeleteUser = (userId) => {
     if (window.confirm("Are You Sure ? Delete This User")) {
-      console.log({ id: userId });
+      dispatch(deleteUser(userId));
     }
   };
+
+  if (loading) {
+    return <p>Loading ....</p>;
+  } else if (error) {
+    return <p>Something Went Wrong...</p>;
+  }
   return (
     <div className="max-w-7xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-6">User Management</h2>
@@ -146,7 +171,6 @@ const UserManagement = () => {
                     onChange={(e) => handleRoleChange(user._id, e.target.value)}
                     className="border rounded p-2"
                   >
-                    <option value="">Select Role</option>
                     <option value="customer">Customer</option>
                     <option value="admin">Admin</option>
                   </select>
