@@ -11,7 +11,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, guestId } = useSelector((state) => state.auth);
+  const { user, guestId, loading } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.cart);
 
   // Get Redirect Parameter and check if it's checkout or something
@@ -83,7 +83,11 @@ const Login = () => {
             type="submit"
             className="w-full bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition p-2"
           >
-            Login
+            {loading ? (
+              <div className="w-10 h-10 animate-[spin_1s_linear_infinite] rounded-full border-4 border-r-[#3B9DF8] border-[#3b9df84b]"></div>
+            ) : (
+              "Login"
+            )}
           </button>
 
           <p className="mt-6 text-center text-sm">

@@ -21,7 +21,6 @@ const OrderManagement = () => {
   }, [navigate, user, dispatch]);
 
   const handleStatusChanged = (orderId, status) => {
-    console.log("Status changed to:", orderId, status);
     dispatch(updateOrderStatus({ id: orderId, status }));
     // You can add logic to update the order status here
   };
