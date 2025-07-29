@@ -1,22 +1,38 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import {
+  fetchAllOrders,
+  updateOrderStatus,
+} from "../../redux/slices/adminOrderSlice";
+
 const OrderManagement = () => {
-  const orders = [
-    {
-      _id: "123",
-      user: {
-        name: "Sifat_Rifat",
-      },
-      totalPrice: 110,
-      status: "Processing",
-    },
-  ];
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+  const { orders, loading, error } = useSelector((state) => state.adminOrders);
+
+  useEffect(() => {
+    if (!user || user.role !== "admin") {
+      navigate("/");
+    } else {
+      dispatch(fetchAllOrders());
+    }
+  }, [navigate, user, dispatch]);
 
   const handleStatusChanged = (orderId, status) => {
     console.log("Status changed to:", orderId, status);
+    dispatch(updateOrderStatus({ id: orderId, status }));
     // You can add logic to update the order status here
   };
 
+  if (loading) {
+    return <p>Loading....</p>;
+  } else if (error) {
+    return <p>Something Went Wrong... {error}</p>;
+  }
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="max-w-7xl mx-autdo p-6">
       <h2 className="text-2xl font-bold mb-6">Order Management</h2>
       <div className="overflow-x-auto shadow-md sm:rounded-lg">
         <table className="min-w-full text-left text-gray-500">
